@@ -21,9 +21,9 @@ def getHSVAfromRGBA(pixel_array, x, y):
     """
     A method to take an x and y coordinate and a pixel array to return the HSVA values
     """
-    pixel = pixel_array(x, y)
-    hsv = colorsys.rgb_to_hsv(pixel[0], pixel[1], pixel[2])
+    R, G, B, A = pixel_array[x, y]
 
+    return list(colorsys.rgb_to_hsv(R/255, G/255, B/255)) + [A]
 
 
 def main():
@@ -31,7 +31,11 @@ def main():
     Main
     """
     image_file_path = f"S:/Windows 10 Host OS/Minecraft/Resources/Textures/item/amethyst_shard.png"
+    
     pixels = getImageArray(image_file_path)
+    H, S, V, A = getHSVAfromRGBA(pixels, 8, 8)
+    H *= 360
+    print(round(H, -1), round(S, 2), round(V, 2), A)
     print(pixels[8, 8])
 
 if __name__ == "__main__":
