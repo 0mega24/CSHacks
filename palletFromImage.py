@@ -9,7 +9,7 @@ Sean Lidy
 
 from PIL import Image, ImageDraw
 import colorsys
-import math
+import os
 
 def openImage(image_file):
     """
@@ -88,13 +88,13 @@ def clumpByKey(input_list, key_index):
             current_group.append(item)
         else:
             if len(current_group) > 1:
-                clumped_data.append(current_group.copy())
+                clumped_data.append(current_group)
             else:
                 clumped_data.append(current_group[0])
             current_group = [item]
     if current_group:
         if len(current_group) > 1:
-            clumped_data.append(current_group.copy())
+            clumped_data.append(current_group)
         else:
             clumped_data.append(current_group[0])
 
@@ -122,6 +122,7 @@ def clumpByValue(unique_color_list):
         else:
             temp = clumpByKey(sublist, 2)
             temp_list.append(temp)
+
     unique_color_list = temp_list
 
     return temp_list
@@ -149,6 +150,14 @@ def clumpBySaturation(unique_color_list):
                 else:
                     temp = clumpByKey(suberlist, 1)
                     temp_list.append(temp)
+        if type(sublist) == list:
+            for suberlist in sublist:
+                if type(suberlist) == list:
+                    temp = sublist
+                    temp_list.pop()
+                    for subestlist in suberlist:
+                        clumpByKey(suberlist, 1)
+                        temp_list.append(subestlist)
     unique_color_list = temp_list
 
     return temp_list
@@ -201,14 +210,14 @@ def createImage(color_list):
     for i in range(0,len(color_list)):
         color_list[i] = getRGBAfromHSVA(color_list[i])
 
-    width, height = len(color_list) * 10, 10
+    width, height = len(color_list) * 25, 25
     image = Image.new("RGB", (width, height))
     draw = ImageDraw.Draw(image)
 
     x_position = 0
     for color in color_list:
-        draw.rectangle([x_position, 0, x_position + 10, height], fill=color)
-        x_position += 10
+        draw.rectangle([x_position, 0, x_position + 25, height], fill=color)
+        x_position += 25
 
     return image
 
@@ -225,20 +234,58 @@ def visualImageOpen(image):
     """
     image.show()
 
-def main():
-    """
-    Main
-    """
-    image_file_path = f"S:/Windows 10 Host OS/Minecraft/Resources/Textures/item/experience_bottle.png"
-    image_save_path = f"S:/Windows 10 Host OS/Minecraft/CSHacks/test.png"
-
-    open_image = openImage(image_file_path)
+def process_image(input_path, output_path):
+    open_image = openImage(input_path)
     color_list = []
     color_list = unifiedSort(open_image, color_list)
 
     image = createImage(color_list)
-    saveImage(image, image_save_path)
-    visualImageOpen(image)
+    saveImage(image, output_path)
+
+def processImagesInDirectory(source_dir, destination_dir):
+    if not os.path.exists(destination_dir):
+        os.makedirs(destination_dir)
+
+    files = os.listdir(source_dir)
+
+    for filename in files:
+        if filename.endswith(".png"):
+            input_path = os.path.join(source_dir, filename)
+            output_path = os.path.join(destination_dir, filename)
+            process_image(input_path, output_path)
+
+def main():
+    """
+    Main
+    """
+    source_directory = "S:/Windows 10 Host OS/Minecraft/Resources/Textures/item"
+    destination_directory = "S:/Windows 10 Host OS/Minecraft/CSHacks/test"
+
+    # open_image = openImage(source_directory)
+    # color_list = []    
+    # color_list = processImage(open_image, color_list)
+    # # print(color_list)
+    # # print(len(color_list), "process")
+    # color_list = clumpByHue(color_list)
+    # # print(color_list)
+    # # print(len(color_list), "hue")
+    # color_list = clumpByValue(color_list)
+    # # print(color_list)
+    # # print(len(color_list), "value")
+    # color_list = clumpBySaturation(color_list)
+    # print(color_list)
+    # print(len(color_list), "sat")
+    # color_list = clumpByAlpha(color_list)
+    # print(color_list)
+    # print(len(color_list), "alpha")
+    # image = createImage(color_list)
+    # saveImage(image, destination_directory)
+
+    # color_list = clumpByAlpha(clumpBySaturation(clumpByValue(clumpByHue(processImage(open_image, color_list)))))
+
+    # print(color_list)
+
+    processImagesInDirectory(source_directory, destination_directory)
 
 if __name__ == "__main__":
     main()
