@@ -8,6 +8,7 @@ Sean Lidy
 from PIL import Image
 import colorsys
 import numpy
+import time
 
 def openImage(image_file):
     """
@@ -38,7 +39,7 @@ def getHSVAfromRGBA(RGBA):
 
     H, S, V, A = list(colorsys.rgb_to_hsv(R/255, G/255, B/255)) + [A]
 
-    return round(H, 2), round(S, 2), round(V, 2), A
+    return (round(H, 2), round(S, 2), round(V, 2), A)
 
 def checkAlphaAndAddToList(HSVA, value_list):
     """
@@ -46,7 +47,17 @@ def checkAlphaAndAddToList(HSVA, value_list):
     """
     if int(HSVA[3]) != 0:
         value_list.append(HSVA)
+
         return value_list
+
+def processImage(image, color_list):
+    pixels = getImageArray(image)
+    width, height = getImageDim(image)
+    for x in range(width):
+        for y in range(height):
+            HSVA = getHSVAfromRGBA(pixels[x, y])
+            checkAlphaAndAddToList(HSVA, color_list)
+    return list(set(color_list))
 
 def main():
     """
@@ -55,20 +66,11 @@ def main():
     image_file_path = f"S:/Windows 10 Host OS/Minecraft/Resources/Textures/item/amethyst_shard.png"
 
     open_image = openImage(image_file_path)
-    pixels = getImageArray(open_image)
 
     color_list = []
-    width, height = getImageDim(open_image)
+    color_list = processImage(open_image, color_list)
 
-    for x in range(width):
-        for y in range(height):
-            HSVA = getHSVAfromRGBA(pixels[x, y])
-            checkAlphaAndAddToList(HSVA, color_list)
-    
     print(color_list)
-    print()
-    print(set(color_list))
-
 
 if __name__ == "__main__":
     main()
