@@ -189,7 +189,41 @@ def clumpByAlpha(unique_color_list):
     return temp_list
 
 def unifiedSort(open_image, color_list):
+    """
+    The cascading implementation of image processing and clump sorting
+    """
     return clumpByAlpha(clumpBySaturation(clumpByValue(clumpByHue(processImage(open_image, color_list)))))
+
+def createImage(color_list):
+    """
+    A method to take a array of HSVA pixels and return image
+    """
+    for i in range(0,len(color_list)):
+        color_list[i] = getRGBAfromHSVA(color_list[i])
+
+    width, height = len(color_list) * 10, 10
+    image = Image.new("RGB", (width, height))
+    draw = ImageDraw.Draw(image)
+
+    x_position = 0
+    for color in color_list:
+        draw.rectangle([x_position, 0, x_position + 10, height], fill=color)
+        x_position += 10
+
+    return image
+
+def saveImage(image, image_save_path):
+    """
+    A method to take a pillow image and a save path and save the image
+    """
+    image.save(image_save_path)
+
+
+def visualImageOpen(image):
+    """
+    A method to take a pillow image and open it with your default system image viewer
+    """
+    image.show()
 
 def main():
     """
@@ -202,22 +236,9 @@ def main():
     color_list = []
     color_list = unifiedSort(open_image, color_list)
 
-    for i in range(0,len(color_list)):
-        color_list[i] = getRGBAfromHSVA(color_list[i])
-
-    width, height = len(color_list) * 10, 10
-    image = Image.new("RGB", (width, height))
-    draw = ImageDraw.Draw(image)
-
-    x_position = 0
-    for color in color_list:
-        draw.rectangle([x_position, 0, x_position + 10, height], fill=color)
-        x_position += 10
-    
-    image.save(image_save_path)
-    image.show()
-
-
+    image = createImage(color_list)
+    saveImage(image, image_save_path)
+    visualImageOpen(image)
 
 if __name__ == "__main__":
     main()
