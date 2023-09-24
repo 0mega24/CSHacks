@@ -110,6 +110,9 @@ def clumpByHue(unique_color_list):
     return clumpByKey(unique_color_list, 0)
 
 def clumpByValue(unique_color_list):
+    """
+    A helper function to clump and sort the hue clumps by value
+    """
     temp_list = []
     for sublist in unique_color_list:
         if len(sublist) == 1 or type(sublist) == tuple:
@@ -124,6 +127,34 @@ def clumpByValue(unique_color_list):
     unique_color_list = temp_list
 
     return temp_list
+
+def clumpBySaturation(unique_color_list):
+    """
+    A helper function to clump and sort the value clumps
+    """
+    temp_list = []
+    for sublist in unique_color_list:
+        if len(sublist) == 1 or type(sublist) == tuple:
+            temp_list.append(sublist)
+        elif len(sublist) == 2 and len(sublist[0]) == 0 and len(sublist[1] == 0):
+            temp = sublist
+            temp.sort(key=lambda x: x[2])
+            temp_list.append(temp)
+        else:
+            for suberlist in sublist:
+                if len (suberlist) == 1 or type(suberlist) == tuple:
+                    temp_list.append(suberlist)
+                elif len(suberlist) == 2 and len(suberlist[0]) == 0 and len(suberlist[1] == 0):
+                    temp = suberlist
+                    temp.sort(key=lambda x: x[2])
+                    temp_list.append(temp)
+                else:
+                    temp = clumpByKey(suberlist, 1)
+                    temp_list.append(temp)
+    unique_color_list = temp_list
+
+    return temp_list
+
 
 
 
@@ -151,6 +182,9 @@ def main():
 
     print(color_list)
 
+    color_list = clumpBySaturation(color_list)
+
+    print(color_list)
 
 
 if __name__ == "__main__":
