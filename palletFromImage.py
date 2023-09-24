@@ -7,11 +7,9 @@ The second major portion is the 4 layers of sorting and clustering
 Sean Lidy
 """
 
-from itertools import groupby
-import multiprocessing
-from PIL import Image
+from PIL import Image, ImageDraw
 import colorsys
-import time
+import math
 
 def openImage(image_file):
     """
@@ -155,36 +153,70 @@ def clumpBySaturation(unique_color_list):
 
     return temp_list
 
+def clumpByAlpha(unique_color_list):
+    """
+    A Helper function to clump and sort the saturation clumps
+    """
+    temp_list = []
+    for sublist in unique_color_list:
+        if len(sublist) == 1 or type(sublist) == tuple:
+            temp_list.append(sublist)
+        elif len(sublist) == 2 and len(sublist[0]) == 0 and len(sublist[1] == 0):
+            temp = sublist
+            temp.sort(key=lambda x: x[2])
+            temp_list.append(temp)
+        else:
+            for suberlist in sublist:
+                if len (suberlist) == 1 or type(suberlist) == tuple:
+                    temp_list.append(suberlist)
+                elif len(suberlist) == 2 and len(suberlist[0]) == 0 and len(suberlist[1] == 0):
+                    temp = suberlist
+                    temp.sort(key=lambda x: x[2])
+                    temp_list.append(temp)
+                else:
+                    for subestlist in suberlist:
+                        if len (subestlist) == 1 or type(subestlist) == tuple:
+                            temp_list.append(subestlist)
+                        elif len(subestlist) == 2 and len(subestlist[0]) == 0 and len(subestlist[1] == 0):
+                            temp = subestlist
+                            temp.sort(key=lambda x: x[3])
+                            temp_list.append(temp)
+                        else:
+                            temp = clumpByKey(subestlist, 3)
+                            temp_list.append(temp)
+    unique_color_list = temp_list
 
+    return temp_list
 
+def unifiedSort(open_image, color_list):
+    return clumpByAlpha(clumpBySaturation(clumpByValue(clumpByHue(processImage(open_image, color_list)))))
 
 def main():
     """
     Main
     """
-    image_file_path = f"S:/Windows 10 Host OS/Minecraft/Resources/Textures/item/amethyst_shard.png"
-    # image_file_path = f"S:/Shared Downloads Folder/test.png"
+    image_file_path = f"S:/Windows 10 Host OS/Minecraft/Resources/Textures/item/experience_bottle.png"
+    image_save_path = f"S:/Windows 10 Host OS/Minecraft/CSHacks/test.png"
 
     open_image = openImage(image_file_path)
-
     color_list = []
-    color_list = [(0.76, 0.34, 0.95, 255), (0.73, 0.48, 0.8, 255), (0.16, 0.16, 1.0, 255), (0.73, 0.42, 0.95, 255), (0.91, 0.2, 1.0, 255), (0.72, 0.59, 0.54, 255), (0.72, 0.54, 0.67, 255), (0.72, 0.53, 0.67, 255), (0.72, 0.54, 0.67, 254), (0.72, 0.52, 0.67, 255)]
+    color_list = unifiedSort(open_image, color_list)
+
+    for i in range(0,len(color_list)):
+        color_list[i] = getRGBAfromHSVA(color_list[i])
+
+    width, height = len(color_list) * 10, 10
+    image = Image.new("RGB", (width, height))
+    draw = ImageDraw.Draw(image)
+
+    x_position = 0
+    for color in color_list:
+        draw.rectangle([x_position, 0, x_position + 10, height], fill=color)
+        x_position += 10
     
-    # color_list = processImage(open_image, color_list)
+    image.save(image_save_path)
+    image.show()
 
-    print(color_list)
-
-    color_list = clumpByHue(color_list)
-
-    print(color_list)
-
-    color_list = clumpByValue(color_list)
-
-    print(color_list)
-
-    color_list = clumpBySaturation(color_list)
-
-    print(color_list)
 
 
 if __name__ == "__main__":
