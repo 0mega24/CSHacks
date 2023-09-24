@@ -235,6 +235,9 @@ def visualImageOpen(image):
     image.show()
 
 def process_image(input_path, output_path):
+    """
+    The conjugated functions to take a image file in and then save the sorted color pallet to the output path
+    """
     open_image = openImage(input_path)
     color_list = []
     color_list = unifiedSort(open_image, color_list)
@@ -243,6 +246,9 @@ def process_image(input_path, output_path):
     saveImage(image, output_path)
 
 def processImagesInDirectory(source_dir, destination_dir):
+    """
+    All of the logic needed to run this program for all of the images in a specific dir
+    """
     if not os.path.exists(destination_dir):
         os.makedirs(destination_dir)
 
