@@ -258,32 +258,9 @@ def main():
     """
     Main
     """
-    source_directory = "S:/Windows 10 Host OS/Minecraft/Resources/Textures/item"
-    destination_directory = "S:/Windows 10 Host OS/Minecraft/CSHacks/test"
+    source_directory = "S:/Windows 10 Host OS/Minecraft/CSHacks/DataSet"
+    destination_directory = "S:/Windows 10 Host OS/Minecraft/CSHacks/Return"
 
-    # open_image = openImage(source_directory)
-    # color_list = []    
-    # color_list = processImage(open_image, color_list)
-    # # print(color_list)
-    # # print(len(color_list), "process")
-    # color_list = clumpByHue(color_list)
-    # # print(color_list)
-    # # print(len(color_list), "hue")
-    # color_list = clumpByValue(color_list)
-    # # print(color_list)
-    # # print(len(color_list), "value")
-    # color_list = clumpBySaturation(color_list)
-    # print(color_list)
-    # print(len(color_list), "sat")
-    # color_list = clumpByAlpha(color_list)
-    # print(color_list)
-    # print(len(color_list), "alpha")
-    # image = createImage(color_list)
-    # saveImage(image, destination_directory)
-
-    # color_list = clumpByAlpha(clumpBySaturation(clumpByValue(clumpByHue(processImage(open_image, color_list)))))
-
-    # print(color_list)
 
     processImagesInDirectory(source_directory, destination_directory)
 
