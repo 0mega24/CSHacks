@@ -65,11 +65,11 @@ This is the final stage of the algorithm where it checks for any lists that have
 
 ## Examples
 Textures that had a limited color palette and were mostly shades of one color lead to very pleasing results.  
-## ![](bamboo_singleleaf.png) ![ ](amethyst_shard.png) ![](carrot.png)
-## ![](axolotl_bucket.png)
-## ![](emerald_ore.png) ![](emerald.png) ![](emerald_block.png)
-## ![](beacon.png) ![](dark_oak_sapling.png) ![](heart_of_the_sea.png) 
-## ![](honeycomb.png) ![](medium_amethyst_bud.png) ![](milk_bucket.png)
-## ![](debug.png)
-## ![](comparator_on.png) ![](bowl.png)
-## ![](birch_chest_boat.png) 
+## ![](README/bamboo_singleleaf.png) ![ ](README/amethyst_shard.png) ![](README/carrot.png)
+## ![](README/axolotl_bucket.png)
+## ![](README/emerald_ore.png) ![](README/emerald.png) ![](README/emerald_block.png)
+## ![](README/beacon.png) ![](README/dark_oak_sapling.png) ![](README/heart_of_the_sea.png) 
+## ![](README/honeycomb.png) ![](README/medium_amethyst_bud.png) ![](README/milk_bucket.png)
+## ![](README/debug.png)
+## ![](README/comparator_on.png) ![](README/bowl.png)
+## ![](README/birch_chest_boat.png) 
